@@ -66,6 +66,21 @@ jobs:
       - name: Build package
         run: mvn -B clean package -DskipTests --file pom.xml
       
+      - name: Create Maven settings.xml
+        run: |
+          mkdir -p ~/.m2
+          cat > ~/.m2/settings.xml << 'EOF'
+          <settings>
+            <servers>
+              <server>
+                <id>central</id>
+                <username>${env.MAVEN_USERNAME}</username>
+                <password>${env.MAVEN_PASSWORD}</password>
+              </server>
+            </servers>
+          </settings>
+          EOF
+      
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@v6
         with:
