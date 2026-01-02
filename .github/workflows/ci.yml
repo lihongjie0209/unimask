@@ -66,16 +66,6 @@ jobs:
       - name: Build package
         run: mvn -B clean package -DskipTests --file pom.xml
       
-      - name: Configure Maven settings
-        uses: s4u/maven-settings-action@v3
-        with:
-          servers: |
-            [{
-              "id": "central",
-              "username": "${{ secrets.MAVEN_USERNAME }}",
-              "password": "${{ secrets.MAVEN_PASSWORD }}"
-            }]
-      
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@v6
         with:
