@@ -29,22 +29,13 @@ jobs:
       - name: Run tests
         run: mvn -B test --file pom.xml
       
-      - name: List test reports
+      - name: Upload test results
         if: always()
-        run: |
-          echo "Listing surefire-reports directory:"
-          ls -la target/surefire-reports/ || echo "Directory not found"
-          echo "Looking for XML files:"
-          find target -name "*.xml" -type f || echo "No XML files found"
-      
-      - name: Generate test report
-        if: always()
-        uses: dorny/test-reporter@v1
+        uses: actions/upload-artifact@v4
         with:
-          name: Maven Tests
-          path: target/surefire-reports/TEST-*.xml
-          reporter: java-junit
-          fail-on-error: false
+          name: test-results
+          path: target/surefire-reports/
+          retention-days: 5
 
   publish:
     name: Publish to Maven Repository
