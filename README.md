@@ -1,6 +1,6 @@
 # UniMask - 中文格式保留加密
 
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/yourusername/unimask)
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/lihongjie0209/unimask)
 [![Java Version](https://img.shields.io/badge/Java-8%2B-blue)](https://www.oracle.com/java/)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
@@ -799,7 +799,7 @@ function UserList({ users }) {
 ## �📮 联系方式
 
 - 作者：Li Hongjie
-- 项目地址：https://github.com/yourusername/unimask
+- 项目地址：https://github.com/lihongjie0209/unimask
 
 ## 🙏 致谢
 
