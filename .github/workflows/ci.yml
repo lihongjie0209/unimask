@@ -57,15 +57,6 @@ jobs:
           distribution: 'temurin'
           cache: maven
       
-      - name: Extract version from tag
-        id: get_version
-        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
-      
-      - name: Update version in pom.xml
-        run: |
-          mvn versions:set -DnewVersion=${{ steps.get_version.outputs.VERSION }}
-          mvn versions:commit
-      
       - name: Build package
         run: mvn -B clean package -DskipTests --file pom.xml
       
