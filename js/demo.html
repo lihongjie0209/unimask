@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniMask Utils 测试示例</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            color: #667eea;
+            margin: 30px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .demo-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .demo-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 600;
+        }
+        
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: monospace;
+        }
+        
+        input[type="text"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            margin-right: 10px;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            background: #5568d3;
+        }
+        
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 6px;
+            border: 2px solid #e0e0e0;
+        }
+        
+        .result-label {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .result-content {
+            font-family: monospace;
+            color: #333;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
+        .status.encrypted {
+            background: #ffe0b2;
+            color: #e65100;
+        }
+        
+        .status.plain {
+            background: #c8e6c9;
+            color: #2e7d32;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        th {
+            background: #f5f5f5;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 UniMask Utils 工具测试</h1>
+        <p class="subtitle">前端加密文本检测和处理工具演示</p>
+        
+        <!-- 示例 1: 基本检测 -->
+        <h2>1️⃣ 基本检测功能</h2>
+        <div class="demo-section">
+            <div class="demo-title">检测文本是否包含加密字符</div>
+            <div class="input-group">
+                <label>输入测试文本：</label>
+                <input type="text" id="testText1" value="张伟明" placeholder="例如：张伟明">
+            </div>
+            <button onclick="testIsEncrypted()">检测</button>
+            <button onclick="setEncryptedText1()">使用加密示例</button>
+            <div class="result" id="result1" style="display: none;">
+                <div class="result-label">检测结果：</div>
+                <div class="result-content" id="resultContent1"></div>
+            </div>
+        </div>
+        
+        <!-- 示例 2: 字符替换 -->
+        <h2>2️⃣ 字符替换功能</h2>
+        <div class="demo-section">
+            <div class="demo-title">将加密字符替换为星号</div>
+            <div class="input-group">
+                <label>输入加密文本：</label>
+                <input type="text" id="testText2" value="" placeholder="例如：张\uE123\uE456">
+            </div>
+            <div class="input-group">
+                <label>替换字符：</label>
+                <input type="text" id="replacement" value="*" placeholder="默认为 *" style="width: 100px;">
+            </div>
+            <button onclick="testReplace()">替换</button>
+            <button onclick="setEncryptedText2()">使用加密示例</button>
+            <div class="result" id="result2" style="display: none;">
+                <div class="result-label">替换结果：</div>
+                <div class="result-content" id="resultContent2"></div>
+            </div>
+        </div>
+        
+        <!-- 示例 3: 文本分析 -->
+        <h2>3️⃣ 文本分析功能</h2>
+        <div class="demo-section">
+            <div class="demo-title">分析文本的加密情况</div>
+            <div class="input-group">
+                <label>输入文本：</label>
+                <input type="text" id="testText3" value="" placeholder="例如：张\uE123\uE456">
+            </div>
+            <button onclick="testAnalyze()">分析</button>
+            <button onclick="setEncryptedText3()">使用加密示例</button>
+            <div class="result" id="result3" style="display: none;">
+                <div class="result-label">分析结果：</div>
+                <div class="result-content" id="resultContent3"></div>
+            </div>
+        </div>
+        
+        <!-- 示例 4: 批量处理对象 -->
+        <h2>4️⃣ 批量处理对象</h2>
+        <div class="demo-section">
+            <div class="demo-title">处理对象中的加密字段</div>
+            <div class="code-block">const user = {
+    id: 1,
+    name: "张\uE123\uE456",
+    phone: "138\uE234\uE345\uE456\uE567",
+    email: "test@example.com"
+};</div>
+            <button onclick="testObjectReplace()">处理对象</button>
+            <div class="result" id="result4" style="display: none;">
+                <div class="result-label">处理结果：</div>
+                <div class="result-content" id="resultContent4"></div>
+            </div>
+        </div>
+        
+        <!-- 示例 5: 批量处理数组 -->
+        <h2>5️⃣ 批量处理数组</h2>
+        <div class="demo-section">
+            <div class="demo-title">处理数组中所有对象的加密字段（模拟数据导出）</div>
+            <button onclick="testArrayReplace()">处理数组</button>
+            <div class="result" id="result5" style="display: none;">
+                <div class="result-label">原始数据：</div>
+                <table id="originalTable"></table>
+                <div class="result-label" style="margin-top: 20px;">处理后数据（可导出）：</div>
+                <table id="processedTable"></table>
+            </div>
+        </div>
+        
+        <!-- 示例 6: 导出格式转换 -->
+        <h2>6️⃣ 导出格式转换</h2>
+        <div class="demo-section">
+            <div class="demo-title">转换为可导出格式（用于 CSV、Excel）</div>
+            <div class="input-group">
+                <label>输入加密文本：</label>
+                <textarea id="testText6" placeholder="例如：张\uE123\uE456\n李\uE234\uE567"></textarea>
+            </div>
+            <button onclick="testExportFormat(true)">保持长度</button>
+            <button onclick="testExportFormat(false)">合并星号</button>
+            <button onclick="setEncryptedText6()">使用示例</button>
+            <div class="result" id="result6" style="display: none;">
+                <div class="result-label">转换结果：</div>
+                <div class="result-content" id="resultContent6"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="unimask-utils.js"></script>
+    <script>
+        // 生成测试用的加密字符
+        function generateEncryptedText(plainText, preserveCount) {
+            let result = '';
+            for (let i = 0; i < plainText.length; i++) {
+                if (i < preserveCount) {
+                    result += plainText[i];
+                } else {
+                    // 使用 PUA 区的随机字符
+                    const pua = 0xE000 + Math.floor(Math.random() * 0x800);
+                    result += String.fromCharCode(pua);
+                }
+            }
+            return result;
+        }
+        
+        // 示例 1: 检测
+        function testIsEncrypted() {
+            const text = document.getElementById('testText1').value;
+            const isEncrypted = UniMaskUtils.isEncrypted(text);
+            const count = UniMaskUtils.countEncryptedChars(text);
+            
+            const status = isEncrypted ? 'encrypted' : 'plain';
+            const statusText = isEncrypted ? '包含加密字符' : '纯明文';
+            
+            document.getElementById('resultContent1').innerHTML = `
+                <div>
+                    <strong>文本：</strong>${text} 
+                    <span class="status ${status}">${statusText}</span>
+                </div>
+                <div style="margin-top: 10px;">
+                    <strong>加密字符数量：</strong>${count}
+                </div>
+            `;
+            document.getElementById('result1').style.display = 'block';
+        }
+        
+        function setEncryptedText1() {
+            document.getElementById('testText1').value = generateEncryptedText('张伟明', 1);
+            testIsEncrypted();
+        }
+        
+        // 示例 2: 替换
+        function testReplace() {
+            const text = document.getElementById('testText2').value;
+            const replacement = document.getElementById('replacement').value || '*';
+            const result = UniMaskUtils.replaceEncryptedWithAsterisk(text, replacement);
+            
+            document.getElementById('resultContent2').innerHTML = `
+                <div><strong>原文：</strong>${text}</div>
+                <div style="margin-top: 10px;"><strong>替换后：</strong>${result}</div>
+            `;
+            document.getElementById('result2').style.display = 'block';
+        }
+        
+        function setEncryptedText2() {
+            document.getElementById('testText2').value = generateEncryptedText('张伟明', 1);
+            testReplace();
+        }
+        
+        // 示例 3: 分析
+        function testAnalyze() {
+            const text = document.getElementById('testText3').value;
+            const analysis = UniMaskUtils.analyzeText(text);
+            
+            let positionsHtml = '';
+            if (analysis.positions.length > 0) {
+                positionsHtml = '<div style="margin-top: 10px;"><strong>加密字符位置：</strong></div>';
+                analysis.positions.forEach(pos => {
+                    positionsHtml += `<div>位置 ${pos.index}: ${pos.codePoint}</div>`;
+                });
+            }
+            
+            document.getElementById('resultContent3').innerHTML = `
+                <div><strong>是否加密：</strong>${analysis.isEncrypted ? '是' : '否'}</div>
+                <div><strong>总字符数：</strong>${analysis.totalChars}</div>
+                <div><strong>加密字符：</strong>${analysis.encryptedChars}</div>
+                <div><strong>明文字符：</strong>${analysis.plainChars}</div>
+                <div><strong>加密率：</strong>${analysis.encryptionRate}</div>
+                ${positionsHtml}
+            `;
+            document.getElementById('result3').style.display = 'block';
+        }
+        
+        function setEncryptedText3() {
+            document.getElementById('testText3').value = generateEncryptedText('张伟明', 1);
+            testAnalyze();
+        }
+        
+        // 示例 4: 对象处理
+        function testObjectReplace() {
+            const user = {
+                id: 1,
+                name: generateEncryptedText('张伟明', 1),
+                phone: generateEncryptedText('13812345678', 3),
+                email: "test@example.com"
+            };
+            
+            const processed = UniMaskUtils.replaceFieldsInObject(user, ['name', 'phone']);
+            
+            document.getElementById('resultContent4').innerHTML = `
+                <div><strong>原始对象：</strong></div>
+                <pre>${JSON.stringify(user, null, 2)}</pre>
+                <div style="margin-top: 15px;"><strong>处理后对象：</strong></div>
+                <pre>${JSON.stringify(processed, null, 2)}</pre>
+            `;
+            document.getElementById('result4').style.display = 'block';
+        }
+        
+        // 示例 5: 数组处理
+        function testArrayReplace() {
+            const users = [
+                { id: 1, name: generateEncryptedText('张伟', 1), age: 25, phone: generateEncryptedText('13812345678', 3) },
+                { id: 2, name: generateEncryptedText('李明', 1), age: 30, phone: generateEncryptedText('13987654321', 3) },
+                { id: 3, name: generateEncryptedText('王芳', 1), age: 28, phone: generateEncryptedText('13698745632', 3) }
+            ];
+            
+            const processed = UniMaskUtils.replaceFieldsInArray(users, ['name', 'phone']);
+            
+            // 显示原始表格
+            let originalHtml = '<tr><th>ID</th><th>姓名</th><th>年龄</th><th>电话</th></tr>';
+            users.forEach(user => {
+                originalHtml += `<tr><td>${user.id}</td><td>${user.name}</td><td>${user.age}</td><td>${user.phone}</td></tr>`;
+            });
+            document.getElementById('originalTable').innerHTML = originalHtml;
+            
+            // 显示处理后表格
+            let processedHtml = '<tr><th>ID</th><th>姓名</th><th>年龄</th><th>电话</th></tr>';
+            processed.forEach(user => {
+                processedHtml += `<tr><td>${user.id}</td><td>${user.name}</td><td>${user.age}</td><td>${user.phone}</td></tr>`;
+            });
+            document.getElementById('processedTable').innerHTML = processedHtml;
+            
+            document.getElementById('result5').style.display = 'block';
+        }
+        
+        // 示例 6: 导出格式
+        function testExportFormat(preserveLength) {
+            const text = document.getElementById('testText6').value;
+            const lines = text.split('\n');
+            const results = lines.map(line => 
+                UniMaskUtils.toExportFormat(line, { preserveLength })
+            );
+            
+            document.getElementById('resultContent6').innerHTML = `
+                <div><strong>模式：</strong>${preserveLength ? '保持长度' : '合并星号'}</div>
+                <div style="margin-top: 10px;"><strong>原文：</strong></div>
+                <pre>${text}</pre>
+                <div style="margin-top: 10px;"><strong>转换后：</strong></div>
+                <pre>${results.join('\n')}</pre>
+            `;
+            document.getElementById('result6').style.display = 'block';
+        }
+        
+        function setEncryptedText6() {
+            const examples = [
+                generateEncryptedText('张伟明', 1),
+                generateEncryptedText('李红', 1),
+                generateEncryptedText('王建国', 1)
+            ];
+            document.getElementById('testText6').value = examples.join('\n');
+            testExportFormat(true);
+        }
+        
+        // 页面加载时运行第一个示例
+        window.onload = function() {
+            console.log('%c✅ UniMaskUtils 工具已加载', 'color: green; font-weight: bold; font-size: 14px;');
+            console.log('Unicode 区域配置:', UniMaskUtils.REGIONS);
+            
+            // 设置初始示例
+            setEncryptedText1();
+        };
+    </script>
+</body>
+</html>

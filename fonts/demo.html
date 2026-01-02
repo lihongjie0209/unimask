@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniMask 字体演示</title>
+    <style>
+        /* OTF 格式 */
+        @font-face {
+            font-family: 'UniMask-OTF';
+            src: url('UniMask.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        /* WOFF 格式 */
+        @font-face {
+            font-family: 'UniMask-WOFF';
+            src: url('UniMask.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        /* WOFF2 格式 */
+        @font-face {
+            font-family: 'UniMask-WOFF2';
+            src: url('UniMask.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        /* 通用字体（回退） */
+        @font-face {
+            font-family: 'UniMask';
+            src: url('UniMask.woff2') format('woff2'),
+                 url('UniMask.woff') format('woff'),
+                 url('UniMask.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            line-height: 1.6;
+            padding: 40px 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding-bottom: 30px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 3em;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 1.2em;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .demo-section {
+            margin-bottom: 40px;
+        }
+        
+        .section-title {
+            color: #333;
+            font-size: 2em;
+            margin-bottom: 20px;
+            padding-left: 15px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-title {
+            color: #667eea;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .icon {
+            font-size: 1.5em;
+        }
+        
+        .text-display {
+            font-size: 2em;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-weight: 500;
+            text-align: center;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .normal-text {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            color: #2e7d32;
+            border: 2px solid #4caf50;
+        }
+        
+        .encrypted-text {
+            font-family: 'UniMask', monospace;
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            color: #e65100;
+            letter-spacing: 4px;
+            border: 2px solid #ff9800;
+        }
+        
+        .encrypted-text-otf {
+            font-family: 'UniMask-OTF', monospace;
+            background: linear-gradient(135deg, #e1f5fe 0%, #b3e5fc 100%);
+            color: #01579b;
+            letter-spacing: 4px;
+            border: 2px solid #03a9f4;
+        }
+        
+        .encrypted-text-woff {
+            font-family: 'UniMask-WOFF', monospace;
+            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+            color: #4a148c;
+            letter-spacing: 4px;
+            border: 2px solid #9c27b0;
+        }
+        
+        .encrypted-text-woff2 {
+            font-family: 'UniMask-WOFF2', monospace;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            color: #1b5e20;
+            letter-spacing: 4px;
+            border: 2px solid #4caf50;
+        }
+        
+        .label {
+            font-size: 0.85em;
+            color: #666;
+            text-align: center;
+            font-style: italic;
+        }
+        
+        .example-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .example-table th,
+        .example-table td {
+            padding: 15px;
+            text-align: left;
+        }
+        
+        .example-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+        
+        .example-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .example-table tr:hover {
+            background: #e3f2fd;
+        }
+        
+        .example-table .normal-col {
+            font-size: 1.3em;
+            color: #2e7d32;
+        }
+        
+        .example-table .encrypted-col {
+            font-family: 'UniMask', monospace;
+            font-size: 1.5em;
+            color: #e65100;
+            letter-spacing: 3px;
+        }
+        
+        .info-box {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 30px 0;
+            border-left: 5px solid #2196F3;
+        }
+        
+        .info-box h3 {
+            color: #1565C0;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+        
+        .info-box ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .info-box li {
+            padding: 8px 0;
+            padding-left: 30px;
+            position: relative;
+            color: #424242;
+        }
+        
+        .info-box li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #4CAF50;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        .code-box {
+            background: #263238;
+            color: #aed581;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .code-box code {
+            color: #aed581;
+        }
+        
+        .interactive-demo {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin: 30px 0;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.1em;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            transition: border-color 0.3s;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .output-display {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        footer {
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            text-align: center;
+            color: #666;
+        }
+        
+        footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        footer a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+            
+            .comparison-grid,
+            .output-display {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔐 UniMask 字体演示</h1>
+            <p class="subtitle">自动将加密区域显示为星号的智能字体</p>
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-number">516</span>
+                    <span class="stat-label">字节 (WOFF2)</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">8,501</span>
+                    <span class="stat-label">字符映射</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">3</span>
+                    <span class="stat-label">字形数量</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- 基本演示 -->
+        <section class="demo-section">
+            <h2 class="section-title">📝 原始文本对比</h2>
+            <div class="comparison-grid">
+                <div class="card">
+                    <div class="card-title">
+                        <span class="icon">👤</span>
+                        原始文本
+                    </div>
+                    <div class="text-display normal-text">张伟明</div>
+                    <div class="label">使用普通字体显示</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">
+                        <span class="icon">🔒</span>
+                        加密效果（通用）
+                    </div>
+                    <div class="text-display encrypted-text">张&#xE123;&#xE456;</div>
+                    <div class="label">使用 UniMask 字体后显示为 张**</div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 字体格式独立演示 -->
+        <section class="demo-section">
+            <h2 class="section-title">🎯 各格式字体独立演示</h2>
+            <div class="info-box" style="background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%); border-color: #f57f17;">
+                <h3 style="color: #f57f17;">💡 提示</h3>
+                <ul style="margin-bottom: 0;">
+                    <li style="color: #424242;">每个演示区域使用不同的字体格式文件</li>
+                    <li style="color: #424242;">所有格式的加密效果完全一致，只是文件大小不同</li>
+                    <li style="color: #424242;">WOFF2 格式最小（516 字节），推荐用于 Web</li>
+                </ul>
+            </div>
+            
+            <div class="comparison-grid">
+                <div class="card">
+                    <div class="card-title">
+                        <span class="icon">📄</span>
+                        OTF 格式
+                    </div>
+                    <div class="text-display encrypted-text-otf">张&#xE123;&#xE456;</div>
+                    <div class="label">UniMask.otf (17.51 KB)</div>
+                    <div class="label" style="margin-top: 8px; font-weight: 600; color: #01579b;">适用于桌面应用、设计软件</div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">
+                        <span class="icon">🌐</span>
+                        WOFF 格式
+                    </div>
+                    <div class="text-display encrypted-text-woff">李&#xE234;&#xE567;</div>
+                    <div class="label">UniMask.woff (0.77 KB)</div>
+                    <div class="label" style="margin-top: 8px; font-weight: 600; color: #4a148c;">Web 字体通用格式</div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">
+                        <span class="icon">⚡</span>
+                        WOFF2 格式
+                    </div>
+                    <div class="text-display encrypted-text-woff2">王&#xE345;&#xE678;</div>
+                    <div class="label">UniMask.woff2 (0.50 KB)</div>
+                    <div class="label" style="margin-top: 8px; font-weight: 600; color: #1b5e20;">Web 字体推荐格式（最小）</div>
+                </div>
+            </div>
+            
+            <div class="info-box">
+                <h3>📊 格式对比</h3>
+                <table class="example-table" style="margin-top: 15px;">
+                    <thead>
+                        <tr>
+                            <th>格式</th>
+                            <th>文件大小</th>
+                            <th>压缩率</th>
+                            <th>适用场景</th>
+                            <th>浏览器支持</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>OTF</strong></td>
+                            <td>17.51 KB</td>
+                            <td>-</td>
+                            <td>桌面应用、设计软件</td>
+                            <td>所有现代浏览器</td>
+                        </tr>
+                        <tr>
+                            <td><strong>WOFF</strong></td>
+                            <td>0.77 KB</td>
+                            <td>95.6% ↓</td>
+                            <td>Web 字体（IE9+）</td>
+                            <td>所有现代浏览器</td>
+                        </tr>
+                        <tr>
+                            <td><strong>WOFF2</strong></td>
+                            <td>0.50 KB</td>
+                            <td>97.1% ↓</td>
+                            <td>Web 字体（推荐）</td>
+                            <td>Chrome 36+, Firefox 39+, Safari 10+</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 姓名脱敏示例 -->
+        <section class="demo-section">
+            <h2 class="section-title">👥 姓名脱敏示例</h2>
+            <table class="example-table">
+                <thead>
+                    <tr>
+                        <th>原始姓名</th>
+                        <th>加密后（Unicode）</th>
+                        <th>UniMask 显示</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="normal-col">张三</td>
+                        <td><code>张 + U+E100</code></td>
+                        <td class="encrypted-col">张&#xE100;</td>
+                    </tr>
+                    <tr>
+                        <td class="normal-col">李四</td>
+                        <td><code>李 + U+E200</code></td>
+                        <td class="encrypted-col">李&#xE200;</td>
+                    </tr>
+                    <tr>
+                        <td class="normal-col">王五</td>
+                        <td><code>王 + U+E300</code></td>
+                        <td class="encrypted-col">王&#xE300;</td>
+                    </tr>
+                    <tr>
+                        <td class="normal-col">刘德华</td>
+                        <td><code>刘 + U+E400 + U+E500</code></td>
+                        <td class="encrypted-col">刘&#xE400;&#xE500;</td>
+                    </tr>
+                    <tr>
+                        <td class="normal-col">李宏杰</td>
+                        <td><code>李 + U+E600 + U+E700</code></td>
+                        <td class="encrypted-col">李&#xE600;&#xE700;</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 工作原理 -->
+        <section class="demo-section">
+            <h2 class="section-title">⚙️ 工作原理</h2>
+            <div class="info-box">
+                <h3>加密流程</h3>
+                <ul>
+                    <li>Java 加密库将中文字符加密为 PUA 区（U+E000-U+F8FF）或韩文区（U+CF70-U+D7A3）</li>
+                    <li>加密后的 Unicode 字符在普通字体下显示为乱码或空白</li>
+                    <li>应用 UniMask 字体后，这些 Unicode 字符自动渲染为星号 (*)</li>
+                    <li>用户看到的是 "张**" 而不是乱码，实现了优雅的脱敏效果</li>
+                </ul>
+            </div>
+
+            <div class="info-box" style="background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); border-color: #ff9800;">
+                <h3 style="color: #e65100;">字符映射规则</h3>
+                <ul>
+                    <li style="color: #424242;">PUA 私有使用区：U+E000 - U+F8FF (6,400 个字符) → 星号 *</li>
+                    <li style="color: #424242;">罕用韩文音节区：U+CF70 - U+D7A3 (2,100 个字符) → 星号 *</li>
+                    <li style="color: #424242;">其他 Unicode 字符：正常显示</li>
+                    <li style="color: #424242;">所有加密字符共享同一个星号字形，字体文件仅 516 字节</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 互动演示 -->
+        <section class="demo-section">
+            <h2 class="section-title">🎮 互动演示</h2>
+            <div class="interactive-demo">
+                <div class="input-group">
+                    <label for="nameInput">输入姓名（前端模拟）：</label>
+                    <input type="text" id="nameInput" placeholder="例如：张伟明" value="张伟明">
+                </div>
+                <div class="comparison-grid">
+                    <div class="card">
+                        <div class="card-title">
+                            <span class="icon">📄</span>
+                            普通字体
+                        </div>
+                        <div class="text-display normal-text" id="normalOutput">张伟明</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">
+                            <span class="icon">📄</span>
+                            OTF 格式
+                        </div>
+                        <div class="text-display encrypted-text-otf" id="encryptedOutputOTF">张&#xE123;&#xE456;</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">
+                            <span class="icon">🌐</span>
+                            WOFF 格式
+                        </div>
+                        <div class="text-display encrypted-text-woff" id="encryptedOutputWOFF">张&#xE123;&#xE456;</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">
+                            <span class="icon">⚡</span>
+                            WOFF2 格式
+                        </div>
+                        <div class="text-display encrypted-text-woff2" id="encryptedOutputWOFF2">张&#xE123;&#xE456;</div>
+                    </div>
+                </div>
+                <div class="label" style="margin-top: 15px; text-align: center;">
+                    ℹ️ 实际应用中，加密由后端 Java 库完成，这里仅为前端演示效果
+                </div>
+            </div>
+        </section>
+
+        <!-- 使用方法 -->
+        <section class="demo-section">
+            <h2 class="section-title">📖 使用方法</h2>
+            
+            <h3 style="color: #333; margin: 20px 0;">1. 引入字体</h3>
+            <div class="code-box">
+<code>@font-face {
+    font-family: 'UniMask';
+    src: url('UniMask.woff2') format('woff2'),
+         url('UniMask.woff') format('woff'),
+         url('UniMask.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.encrypted-text {
+    font-family: 'UniMask', monospace;
+    letter-spacing: 3px;
+}</code>
+            </div>
+
+            <h3 style="color: #333; margin: 20px 0;">2. 应用到元素</h3>
+            <div class="code-box">
+<code>&lt;!-- 后端返回加密文本 --&gt;
+&lt;div class="encrypted-text"&gt;
+    张&amp;#xE123;&amp;#xE456;
+&lt;/div&gt;
+
+&lt;!-- 浏览器显示为: 张** --&gt;</code>
+            </div>
+
+            <h3 style="color: #333; margin: 20px 0;">3. Java 后端加密</h3>
+            <div class="code-box">
+<code>ChineseFPEService service = new ChineseFPEService("password");
+String encrypted = service.encrypt("张伟明", "context", 1);
+// encrypted = "张" + "\uE123\uE456"
+
+// 传输到前端，应用 UniMask 字体后显示为: 张**</code>
+            </div>
+        </section>
+
+        <!-- 技术优势 -->
+        <section class="demo-section">
+            <h2 class="section-title">✨ 技术优势</h2>
+            <div class="comparison-grid">
+                <div class="card">
+                    <div class="card-title">
+                        <span class="icon">⚡</span>
+                        性能优秀
+                    </div>
+                    <p>字体文件仅 516 字节，加载速度极快，无 JavaScript 开销</p>
+                </div>
+                <div class="card">
+                    <div class="card-title">
+                        <span class="icon">🌐</span>
+                        兼容性好
+                    </div>
+                    <p>支持所有现代浏览器，包括移动端和桌面端</p>
+                </div>
+                <div class="card">
+                    <div class="card-title">
+                        <span class="icon">🖨️</span>
+                        可打印
+                    </div>
+                    <p>打印输出时同样显示为星号，保护隐私</p>
+                </div>
+                <div class="card">
+                    <div class="card-title">
+                        <span class="icon">🔒</span>
+                        安全性高
+                    </div>
+                    <p>复制粘贴后仍是加密字符，无法还原原文</p>
+                </div>
+                <div class="card">
+                    <div class="card-title">
+                        <span class="icon">🎨</span>
+                        零侵入
+                    </div>
+                    <p>前端只需引入 CSS，无需修改现有代码</p>
+                </div>
+                <div class="card">
+                    <div class="card-title">
+                        <span class="icon">🔍</span>
+                        SEO 友好
+                    </div>
+                    <p>搜索引擎看到的是加密后的字符，不会泄露信息</p>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p><strong>UniMask</strong> - 中文格式保留加密库</p>
+            <p style="margin-top: 10px;">
+                <a href="https://github.com/yourusername/unimask" target="_blank">GitHub</a> | 
+                <a href="../README.md">文档</a>
+            </p>
+            <p style="margin-top: 15px; font-size: 0.9em;">
+                MIT License © 2026
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // 互动演示功能
+        const nameInput = document.getElementById('nameInput');
+        const normalOutput = document.getElementById('normalOutput');
+        const encryptedOutputOTF = document.getElementById('encryptedOutputOTF');
+        const encryptedOutputWOFF = document.getElementById('encryptedOutputWOFF');
+        const encryptedOutputWOFF2 = document.getElementById('encryptedOutputWOFF2');
+
+        function simulateEncryption(text) {
+            if (!text) return '';
+            
+            // 保留第一个字，其余字符用 PUA 区字符替换（模拟加密）
+            let result = text.charAt(0);
+            for (let i = 1; i < text.length; i++) {
+                // 使用 PUA 区的随机字符
+                const pua = 0xE000 + Math.floor(Math.random() * 0x800);
+                result += String.fromCharCode(pua);
+            }
+            return result;
+        }
+
+        nameInput.addEventListener('input', function() {
+            const value = this.value;
+            const encrypted = simulateEncryption(value) || '(空)';
+            
+            normalOutput.textContent = value || '(空)';
+            // 所有格式使用相同的加密结果，只是字体不同
+            encryptedOutputOTF.textContent = encrypted;
+            encryptedOutputWOFF.textContent = encrypted;
+            encryptedOutputWOFF2.textContent = encrypted;
+        });
+
+        // 初始化
+        const initialEncrypted = simulateEncryption(nameInput.value);
+        normalOutput.textContent = nameInput.value;
+        encryptedOutputOTF.textContent = initialEncrypted;
+        encryptedOutputWOFF.textContent = initialEncrypted;
+        encryptedOutputWOFF2.textContent = initialEncrypted;
+    </script>
+</body>
+</html>
