@@ -29,12 +29,20 @@ jobs:
       - name: Run tests
         run: mvn -B test --file pom.xml
       
+      - name: List test reports
+        if: always()
+        run: |
+          echo "Listing surefire-reports directory:"
+          ls -la target/surefire-reports/ || echo "Directory not found"
+          echo "Looking for XML files:"
+          find target -name "*.xml" -type f || echo "No XML files found"
+      
       - name: Generate test report
         if: always()
         uses: dorny/test-reporter@v1
         with:
           name: Maven Tests
-          path: target/surefire-reports/*.xml
+          path: target/surefire-reports/TEST-*.xml
           reporter: java-junit
           fail-on-error: false
 
@@ -72,16 +80,23 @@ jobs:
         with:
           servers: |
             [{
-              "id": "ossrh",
+              "id": "central",
               "username": "${{ secrets.MAVEN_USERNAME }}",
               "password": "${{ secrets.MAVEN_PASSWORD }}"
             }]
       
-      - name: Publish to Maven Repository
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+      
+      - name: Publish to Maven Central
         run: mvn -B deploy -DskipTests --file pom.xml
         env:
           MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
       
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
