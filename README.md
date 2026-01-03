@@ -51,7 +51,7 @@ UniMask 是一个专门为中文设计的格式保留加密（Format-Preserving 
 <dependency>
     <groupId>cn.lihongjie</groupId>
     <artifactId>unimask</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 
@@ -375,20 +375,6 @@ for (String text : texts) {
 3. **保留长度一致性**：加密和解密时 preserveLength 参数必须一致
 4. **字符集限制**：仅支持 8,410 个预定义的中文字符
 5. **实例复用**：建议复用服务实例以提升性能
-
-## 📄 许可证
-
-MIT License - 详见 [LICENSE](LICENSE) 文件
-
-## 🤝 贡献
-
-欢迎提交 Issue 和 Pull Request！
-
-1. Fork 本项目
-2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 开启 Pull Request
 
 ## 🎨 字体脱敏展示
 
@@ -795,7 +781,19 @@ function UserList({ users }) {
 - ✅ **高性能**：优化的批量处理算法
 - ✅ **类型安全**：完善的参数校验
 - ✅ **易集成**：简洁的 API 设计
+## 📄 许可证
 
+MIT License - 详见 [LICENSE](LICENSE) 文件
+
+## 🤝 贡献
+
+欢迎提交 Issue 和 Pull Request！
+
+1. Fork 本项目
+2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 开启 Pull Request
 ## �📮 联系方式
 
 - 作者：Li Hongjie

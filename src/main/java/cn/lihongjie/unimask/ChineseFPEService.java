@@ -316,31 +316,24 @@ public class ChineseFPEService {
      */
     private String decryptMiddlePart(String encryptedMiddle, String tweak) {
         // 1. 识别哪些字符是加密字符，哪些是原样保留的字符
+        // 优化：直接通过 Unicode 范围判断，避免逐个尝试异常捕获
         int[] encryptedIndices = new int[encryptedMiddle.length()];
         boolean[] isEncrypted = new boolean[encryptedMiddle.length()];
         int encryptedCount = 0;
         
         for (int i = 0; i < encryptedMiddle.length(); i++) {
             char c = encryptedMiddle.charAt(i);
-            try {
-                // 尝试反向映射，如果成功说明是加密字符
+            
+            // 直接通过字符范围判断是否为加密字符
+            if (charMapping.isEncryptedChar(c)) {
+                // 是加密字符，反向映射到索引
                 encryptedIndices[i] = charMapping.mapFromEncryptedChar(c);
                 isEncrypted[i] = true;
                 encryptedCount++;
-            } catch (IllegalArgumentException e) {
-                // 不是加密字符，可能是原样保留的字符
-                int index = charMapping.getCharIndex(c);
-                if (index != -1) {
-                    // 在字典中但不是加密字符，可能在保留区
-                    encryptedIndices[i] = index;
-                    isEncrypted[i] = true;
-                    encryptedCount++;
-                } else {
-                    // 不在字典中，是原样保留的字符
-                    encryptedIndices[i] = -1;
-                    isEncrypted[i] = false;
-                    logger.debug("Character '{}' is not encrypted, keeping as-is", c);
-                }
+            } else {
+                // 不是加密字符，原样保留
+                encryptedIndices[i] = -1;
+                isEncrypted[i] = false;
             }
         }
         

@@ -310,6 +310,27 @@ public class CharacterMapping {
     }
     
     /**
+     * 检查字符是否为加密字符（在 PUA 或罕用韩文音节区）
+     * @param c 待检查的字符
+     * @return 如果是加密字符返回 true，否则返回 false
+     */
+    public boolean isEncryptedChar(char c) {
+        int codePoint = (int) c;
+        
+        // 检查是否在 PUA 区
+        if (codePoint >= PUA_START && codePoint < PUA_START + PUA_CAPACITY) {
+            return true;
+        }
+        
+        // 检查是否在罕用韩文音节区
+        if (codePoint >= RARE_KOREAN_START && codePoint < RARE_KOREAN_START + RARE_KOREAN_CAPACITY) {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    /**
      * 将原始索引映射为对应的加密字符索引
      * 此方法用于在填充场景下获取加密字符的索引
      * @param index 原始字符的索引
