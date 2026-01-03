@@ -51,7 +51,7 @@ UniMask 是一个专门为中文设计的格式保留加密（Format-Preserving 
 <dependency>
     <groupId>cn.lihongjie</groupId>
     <artifactId>unimask</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 </dependency>
 ```
 
